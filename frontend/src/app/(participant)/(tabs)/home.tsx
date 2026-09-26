@@ -130,7 +130,7 @@ function FeaturedCard({
           </View>
 
           <Pressable style={featS.bookmarkBtn} accessibilityLabel="Save event">
-            <Ionicons name="bookmark-outline" size={16} color="#FFF" />
+            <Ionicons name="bookmark-outline" size={16} color="#000000" />
           </Pressable>
         </View>
       </View>
@@ -239,22 +239,22 @@ const featS = StyleSheet.create({
     letterSpacing: 1,
   },
   categoryPill: {
-    backgroundColor: "rgba(255,255,255,0.18)",
-    paddingHorizontal: 10,
+    backgroundColor: "#FFFFFF",
+    paddingHorizontal: 12,
     paddingVertical: 5,
     borderRadius: 50,
   },
   categoryText: {
     ...typography.label,
-    fontSize: 10.5,
-    color: "#FFF",
-    fontWeight: "600",
+    fontSize: 11,
+    color: "#000000",
+    fontWeight: "700",
   },
   bookmarkBtn: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: "rgba(255,255,255,0.15)",
+    backgroundColor: "#FFFFFF",
     alignItems: "center",
     justifyContent: "center",
   },

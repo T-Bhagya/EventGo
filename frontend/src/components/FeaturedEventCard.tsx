@@ -153,8 +153,8 @@ const styles = StyleSheet.create({
   },
 
   categoryBadge: {
-    backgroundColor: "rgba(255, 255, 255, 0.25)",
-    paddingHorizontal: 10,
+    backgroundColor: "#FFFFFF",
+    paddingHorizontal: 12,
     paddingVertical: 5,
     borderRadius: radius.full,
   },
@@ -162,7 +162,8 @@ const styles = StyleSheet.create({
   categoryText: {
     ...typography.label,
     fontSize: 11,
-    color: colors.white,
+    color: "#000000",
+    fontWeight: "700",
   },
 
   bottomContent: {
