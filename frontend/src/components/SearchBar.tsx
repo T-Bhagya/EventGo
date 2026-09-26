@@ -26,7 +26,7 @@ export type SearchBarProps = Omit<TextInputProps, "style"> & {
 
 /**
  * SearchBar - EventGo minimalist search bar component.
- * Supports instant input clearing and optional filter trigger button.
+ * Height: 60px, Radius: 30px, White surface, soft shadow, subtle border #ECEEF2.
  */
 export function SearchBar({
   value,
@@ -35,7 +35,7 @@ export function SearchBar({
   onFilterPress,
   hasActiveFilters = false,
   containerStyle,
-  placeholder = "Search events, categories, venues...",
+  placeholder = "Search events, venues or organizers",
   ...restProps
 }: SearchBarProps) {
   const handleClear = () => {
@@ -48,8 +48,8 @@ export function SearchBar({
       <View style={styles.inputWrapper}>
         <Ionicons
           name="search-outline"
-          size={20}
-          color={colors.textMuted}
+          size={21}
+          color={colors.emerald}
           style={styles.searchIcon}
         />
 
@@ -57,7 +57,7 @@ export function SearchBar({
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
-          placeholderTextColor={colors.textMuted}
+          placeholderTextColor="#9CA3AF"
           style={styles.input}
           returnKeyType="search"
           {...restProps}
@@ -73,27 +73,27 @@ export function SearchBar({
             <Ionicons name="close-circle" size={18} color={colors.textMuted} />
           </Pressable>
         ) : null}
-      </View>
 
-      {onFilterPress ? (
-        <Pressable
-          onPress={onFilterPress}
-          style={({ pressed }) => [
-            styles.filterButton,
-            hasActiveFilters && styles.filterButtonActive,
-            pressed && styles.filterButtonPressed,
-          ]}
-          accessibilityRole="button"
-          accessibilityLabel="Open filters"
-        >
-          <Ionicons
-            name="options-outline"
-            size={20}
-            color={hasActiveFilters ? colors.white : colors.primary}
-          />
-          {hasActiveFilters ? <View style={styles.filterBadgeDot} /> : null}
-        </Pressable>
-      ) : null}
+        {onFilterPress ? (
+          <Pressable
+            onPress={onFilterPress}
+            style={({ pressed }) => [
+              styles.filterButton,
+              hasActiveFilters && styles.filterButtonActive,
+              pressed && styles.filterButtonPressed,
+            ]}
+            accessibilityRole="button"
+            accessibilityLabel="Open filters"
+          >
+            <Ionicons
+              name="options-outline"
+              size={18}
+              color={hasActiveFilters ? colors.white : "#121316"}
+            />
+            {hasActiveFilters ? <View style={styles.filterBadgeDot} /> : null}
+          </Pressable>
+        ) : null}
+      </View>
     </View>
   );
 }
@@ -104,24 +104,29 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    gap: spacing.sm,
     width: "100%",
   },
 
   inputWrapper: {
     flex: 1,
-    height: 48,
-    backgroundColor: colors.surface,
-    borderRadius: radius.md,
+    height: 60, // 58-62px specification
+    backgroundColor: "#FFFFFF",
+    borderRadius: 30, // 28-31px specification
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: "#ECEEF2",
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: 16,
+
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.04,
+    shadowRadius: 10,
+    elevation: 3,
   },
 
   searchIcon: {
-    marginRight: 8,
+    marginRight: 10,
   },
 
   input: {
@@ -129,43 +134,41 @@ const styles = StyleSheet.create({
     height: "100%",
     ...typography.bodyMedium,
     fontSize: 14.5,
-    color: colors.textPrimary,
+    color: "#121316",
     paddingVertical: 0,
   },
 
   clearButton: {
     padding: 4,
+    marginRight: 4,
   },
 
   filterButton: {
-    width: 48,
-    height: 48,
-    backgroundColor: colors.surface,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
+    width: 38,
+    height: 38,
+    backgroundColor: "#F3F4F7",
+    borderRadius: 19,
     alignItems: "center",
     justifyContent: "center",
     position: "relative",
   },
 
   filterButtonActive: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
+    backgroundColor: "#121316",
   },
 
   filterButtonPressed: {
     opacity: 0.85,
-    transform: [{ scale: 0.96 }],
+    transform: [{ scale: 0.94 }],
   },
 
   filterBadgeDot: {
     position: "absolute",
-    top: 10,
-    right: 10,
-    width: 7,
-    height: 7,
-    borderRadius: 4,
+    top: 8,
+    right: 8,
+    width: 6,
+    height: 6,
+    borderRadius: 3,
     backgroundColor: colors.emeraldBright,
   },
 });

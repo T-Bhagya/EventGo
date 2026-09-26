@@ -8,16 +8,13 @@ import {
   Text,
   View,
 } from "react-native";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 import AppButton from "../../components/AppButton";
 import AppTextInput from "../../components/AppTextInput";
-import { colors } from "../../theme/colors";
-import { radius } from "../../theme/radius";
 import { spacing } from "../../theme/spacing";
-import { typography } from "../../theme/typography";
 
 export default function LoginScreen() {
   const params = useLocalSearchParams<{ role?: string }>();
@@ -28,8 +25,6 @@ export default function LoginScreen() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const insets = useSafeAreaInsets();
-
   const handleLogin = () => {
     if (!email.trim() || !password.trim()) {
       setError("Please fill in both email and password.");
@@ -39,7 +34,6 @@ export default function LoginScreen() {
     setError("");
     setLoading(true);
 
-    // Mock authentication delay & navigation
     setTimeout(() => {
       setLoading(false);
       if (params.role === "organizer") {
@@ -72,7 +66,7 @@ export default function LoginScreen() {
               accessibilityRole="button"
               accessibilityLabel="Go back"
             >
-              <Ionicons name="arrow-back" size={22} color={colors.textPrimary} />
+              <Ionicons name="arrow-back" size={20} color="#111827" />
             </Pressable>
 
             <View style={styles.roleBadge}>
@@ -172,37 +166,33 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: "#FFFFFF",
   },
-
   container: {
     flex: 1,
   },
-
   scrollContent: {
-    paddingHorizontal: spacing.screen,
-    paddingTop: spacing.sm,
-    paddingBottom: spacing.xl,
+    paddingHorizontal: 20,
+    paddingTop: 10,
+    paddingBottom: 40,
   },
 
   topBar: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: spacing.lg,
+    marginBottom: 24,
   },
-
   backButton: {
     width: 40,
     height: 40,
-    borderRadius: radius.md,
-    backgroundColor: colors.surface,
+    borderRadius: 20,
+    backgroundColor: "#F3F4F6",
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: "#E5E7EB",
     alignItems: "center",
     justifyContent: "center",
   },
-
   pressed: {
     opacity: 0.7,
   },
@@ -210,51 +200,46 @@ const styles = StyleSheet.create({
   roleBadge: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: colors.surfaceSoft,
+    backgroundColor: "#F9FAFB",
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: radius.full,
+    borderRadius: 9999,
     borderWidth: 1,
-    borderColor: colors.borderSoft,
+    borderColor: "#E5E7EB",
     gap: 6,
   },
-
   roleDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: colors.emerald,
+    width: 7,
+    height: 7,
+    borderRadius: 3.5,
+    backgroundColor: "#F5B800",
   },
-
   roleText: {
-    ...typography.label,
     fontSize: 12,
-    color: colors.textPrimary,
+    fontWeight: "700",
+    color: "#111827",
   },
 
   headerSection: {
-    marginBottom: spacing.xl,
+    marginBottom: 24,
   },
-
   title: {
-    ...typography.headlineLarge,
-    color: colors.textPrimary,
+    fontSize: 28,
+    fontWeight: "800",
+    color: "#111827",
   },
-
   subtitle: {
-    ...typography.bodyLarge,
-    fontSize: 15,
-    color: colors.textSecondary,
-    marginTop: spacing.xs,
+    fontSize: 14.5,
+    color: "#6B7280",
+    marginTop: 6,
   },
 
   form: {
-    gap: spacing.md,
+    gap: 16,
   },
-
   errorText: {
-    ...typography.bodySmall,
-    color: colors.error,
+    fontSize: 12.5,
+    color: "#EF4444",
     marginTop: -4,
   },
 
@@ -262,34 +247,30 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     marginTop: -4,
   },
-
   forgotText: {
-    ...typography.bodyMedium,
     fontSize: 13.5,
-    fontWeight: "500",
-    color: colors.emerald,
+    fontWeight: "700",
+    color: "#0A0A0C",
   },
 
   submitButton: {
-    marginTop: spacing.sm,
+    marginTop: 8,
   },
 
   dividerRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: spacing.xl,
-    gap: spacing.md,
+    marginVertical: 24,
+    gap: 14,
   },
-
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: colors.border,
+    backgroundColor: "#E5E7EB",
   },
-
   dividerText: {
-    ...typography.bodySmall,
-    color: colors.textMuted,
+    fontSize: 12.5,
+    color: "#9CA3AF",
   },
 
   footerRow: {
@@ -298,16 +279,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 6,
   },
-
   footerText: {
-    ...typography.bodyMedium,
-    color: colors.textSecondary,
+    fontSize: 14,
+    color: "#6B7280",
   },
-
   signUpText: {
-    ...typography.titleMedium,
-    fontSize: 14.5,
-    color: colors.primary,
-    fontWeight: "600",
+    fontSize: 14,
+    fontWeight: "800",
+    color: "#0A0A0C",
   },
 });

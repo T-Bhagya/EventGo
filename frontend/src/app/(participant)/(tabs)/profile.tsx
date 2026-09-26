@@ -11,12 +11,6 @@ import { Image } from "expo-image";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
-import SecondaryButton from "../../../components/SecondaryButton";
-import { colors } from "../../../theme/colors";
-import { radius } from "../../../theme/radius";
-import { spacing } from "../../../theme/spacing";
-import { typography } from "../../../theme/typography";
-
 export default function ParticipantProfileScreen() {
   const user = {
     name: "Alex Morgan",
@@ -39,12 +33,20 @@ export default function ParticipantProfileScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Header */}
+        {/* Top Header Bar */}
         <View style={styles.header}>
-          <Text style={styles.title}>Participant Profile</Text>
+          <Text style={styles.title}>Profile</Text>
+          <Pressable
+            onPress={() => {}}
+            style={({ pressed }) => [styles.settingsBtn, pressed && styles.pressed]}
+            accessibilityRole="button"
+            accessibilityLabel="Settings"
+          >
+            <Ionicons name="settings-outline" size={20} color="#111827" />
+          </Pressable>
         </View>
 
-        {/* Profile Card */}
+        {/* ── 1. PROFILE CARD ────────────────────────────────────────────── */}
         <View style={styles.profileCard}>
           <View style={styles.avatarWrapper}>
             <Image
@@ -70,7 +72,7 @@ export default function ParticipantProfileScreen() {
           </View>
         </View>
 
-        {/* Stats Row */}
+        {/* ── 2. STATS ROW ───────────────────────────────────────────────── */}
         <View style={styles.statsContainer}>
           <View style={styles.statBox}>
             <Text style={styles.statNumber}>{user.eventsAttended}</Text>
@@ -88,47 +90,65 @@ export default function ParticipantProfileScreen() {
           </View>
         </View>
 
-        {/* Switch Role Banner */}
+        {/* ── 3. ORGANIZER SWITCH BANNER (Black & Yellow Theme) ─────────── */}
         <View style={styles.switchBanner}>
-          <View style={styles.switchTextGroup}>
-            <Text style={styles.switchTitle}>Are you an Event Organizer?</Text>
-            <Text style={styles.switchSub}>
-              Switch to Organizer mode to create and publish campus events.
-            </Text>
+          <View style={styles.switchBannerHeader}>
+            <View style={styles.switchIconBadge}>
+              <Ionicons name="briefcase" size={18} color="#F5B800" />
+            </View>
+            <View style={styles.switchTextGroup}>
+              <Text style={styles.switchTitle}>Are you an Event Organizer?</Text>
+              <Text style={styles.switchSub}>
+                Switch to Organizer mode to create and publish campus events.
+              </Text>
+            </View>
           </View>
-          <SecondaryButton
-            title="Switch Mode"
+
+          <Pressable
             onPress={handleSwitchToOrganizer}
-            style={styles.switchButton}
-          />
+            style={({ pressed }) => [styles.switchBtn, pressed && styles.switchBtnPressed]}
+            accessibilityRole="button"
+            accessibilityLabel="Switch to Organizer Mode"
+          >
+            <Text style={styles.switchBtnText}>Switch Mode</Text>
+            <Ionicons name="arrow-forward" size={16} color="#FFFFFF" />
+          </Pressable>
         </View>
 
-        {/* Menu Items */}
+        {/* ── 4. MENU ITEMS LIST ─────────────────────────────────────────── */}
         <View style={styles.menuContainer}>
           <Pressable style={({ pressed }) => [styles.menuItem, pressed && styles.pressed]}>
-            <Ionicons name="person-outline" size={20} color={colors.textPrimary} />
+            <View style={styles.menuIconBox}>
+              <Ionicons name="person-outline" size={18} color="#111827" />
+            </View>
             <Text style={styles.menuText}>Edit Personal Info</Text>
-            <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
+            <Ionicons name="chevron-forward" size={18} color="#9CA3AF" />
           </Pressable>
 
           <Pressable style={({ pressed }) => [styles.menuItem, pressed && styles.pressed]}>
-            <Ionicons name="heart-outline" size={20} color={colors.textPrimary} />
+            <View style={styles.menuIconBox}>
+              <Ionicons name="heart-outline" size={18} color="#111827" />
+            </View>
             <Text style={styles.menuText}>Manage Event Interests</Text>
-            <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
+            <Ionicons name="chevron-forward" size={18} color="#9CA3AF" />
           </Pressable>
 
           <Pressable style={({ pressed }) => [styles.menuItem, pressed && styles.pressed]}>
-            <Ionicons name="notifications-outline" size={20} color={colors.textPrimary} />
+            <View style={styles.menuIconBox}>
+              <Ionicons name="notifications-outline" size={18} color="#111827" />
+            </View>
             <Text style={styles.menuText}>Notification Settings</Text>
-            <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
+            <Ionicons name="chevron-forward" size={18} color="#9CA3AF" />
           </Pressable>
 
           <Pressable
             onPress={() => router.replace("/role-selection" as any)}
             style={({ pressed }) => [styles.menuItem, styles.menuItemLast, pressed && styles.pressed]}
           >
-            <Ionicons name="log-out-outline" size={20} color={colors.error} />
-            <Text style={[styles.menuText, { color: colors.error }]}>Log Out</Text>
+            <View style={[styles.menuIconBox, { backgroundColor: "#FEE2E2" }]}>
+              <Ionicons name="log-out-outline" size={18} color="#EF4444" />
+            </View>
+            <Text style={[styles.menuText, { color: "#EF4444" }]}>Log Out</Text>
           </Pressable>
         </View>
       </ScrollView>
@@ -139,77 +159,86 @@ export default function ParticipantProfileScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: "#FFFFFF",
   },
-
   scrollContent: {
-    paddingHorizontal: spacing.screen,
-    paddingTop: spacing.xs,
-    paddingBottom: spacing.xl,
+    paddingHorizontal: 16,
+    paddingTop: 10,
+    paddingBottom: 110,
   },
 
+  // ── Header ────────────────────────────────────────────────────────────────
   header: {
-    marginBottom: spacing.md,
-  },
-
-  title: {
-    ...typography.headlineLarge,
-    color: colors.textPrimary,
-  },
-
-  profileCard: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.xl,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: spacing.xl,
+    flexDirection: "row",
     alignItems: "center",
-    marginBottom: spacing.md,
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 4 },
+    justifyContent: "space-between",
+    marginBottom: 16,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: "800",
+    color: "#111827",
+  },
+  settingsBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#F3F4F6",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  // ── Profile Card ──────────────────────────────────────────────────────────
+  profileCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "#F3F4F6",
+    padding: 20,
+    alignItems: "center",
+    marginBottom: 14,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
-    shadowRadius: 12,
+    shadowRadius: 10,
     elevation: 2,
   },
-
   avatarWrapper: {
     position: "relative",
-    marginBottom: spacing.md,
+    marginBottom: 12,
   },
-
   avatar: {
-    width: 88,
-    height: 88,
-    borderRadius: 44,
-    backgroundColor: colors.surfaceSoft,
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+    backgroundColor: "#F3F4F6",
   },
-
   roleBadge: {
     position: "absolute",
-    bottom: -4,
+    bottom: -6,
     alignSelf: "center",
-    backgroundColor: colors.primary,
-    paddingHorizontal: 10,
-    paddingVertical: 3,
-    borderRadius: radius.full,
+    backgroundColor: "#0A0A0C",
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 9999,
+    borderWidth: 1.5,
+    borderColor: "#FFFFFF",
   },
-
   roleText: {
-    ...typography.label,
     fontSize: 10.5,
-    color: colors.white,
+    fontWeight: "800",
+    color: "#FFFFFF",
+    letterSpacing: 0.4,
   },
 
   userName: {
-    ...typography.headlineMedium,
     fontSize: 20,
-    color: colors.textPrimary,
+    fontWeight: "800",
+    color: "#111827",
   },
-
   userEmail: {
-    ...typography.bodyMedium,
-    fontSize: 13.5,
-    color: colors.textSecondary,
+    fontSize: 13,
+    color: "#6B7280",
     marginTop: 2,
   },
 
@@ -217,124 +246,162 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 6,
-    marginTop: spacing.md,
+    marginTop: 14,
     justifyContent: "center",
   },
-
   interestPill: {
-    backgroundColor: colors.surfaceSoft,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: radius.full,
-    borderWidth: 1,
-    borderColor: colors.borderSoft,
+    backgroundColor: "#F3F4F6",
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    borderRadius: 9999,
   },
-
   interestText: {
-    ...typography.label,
-    fontSize: 11,
-    color: colors.textSecondary,
+    fontSize: 11.5,
+    fontWeight: "700",
+    color: "#4B5563",
   },
 
+  // ── Stats Container ───────────────────────────────────────────────────────
   statsContainer: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.lg,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
     borderWidth: 1,
-    borderColor: colors.borderSoft,
-    paddingVertical: spacing.md,
+    borderColor: "#F3F4F6",
+    paddingVertical: 14,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
-    marginBottom: spacing.md,
+    marginBottom: 14,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.03,
+    shadowRadius: 8,
+    elevation: 2,
   },
-
   statBox: {
     alignItems: "center",
     flex: 1,
   },
-
   statNumber: {
-    ...typography.titleLarge,
     fontSize: 20,
-    color: colors.primary,
-    fontWeight: "700",
+    fontWeight: "800",
+    color: "#0A0A0C",
   },
-
   statLabel: {
-    ...typography.bodySmall,
     fontSize: 12,
-    color: colors.textSecondary,
+    fontWeight: "600",
+    color: "#6B7280",
     marginTop: 2,
   },
-
   statDivider: {
     width: 1,
     height: 28,
-    backgroundColor: colors.borderSoft,
+    backgroundColor: "#E5E7EB",
   },
 
+  // ── Organizer Switch Banner ────────────────────────────────────────────────
   switchBanner: {
-    backgroundColor: colors.emeraldSoft,
-    borderRadius: radius.lg,
+    backgroundColor: "#FFFDF0",
+    borderRadius: 18,
     borderWidth: 1,
-    borderColor: "rgba(15, 118, 110, 0.2)",
-    padding: spacing.md,
-    marginBottom: spacing.md,
-    gap: spacing.sm,
+    borderColor: "rgba(245, 184, 0, 0.35)",
+    padding: 16,
+    marginBottom: 14,
   },
-
+  switchBannerHeader: {
+    flexDirection: "row",
+    gap: 12,
+    marginBottom: 14,
+  },
+  switchIconBadge: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: "#0A0A0C",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   switchTextGroup: {
-    gap: 2,
+    flex: 1,
+    justifyContent: "center",
   },
-
   switchTitle: {
-    ...typography.titleMedium,
     fontSize: 15,
-    color: colors.emerald,
-    fontWeight: "700",
+    fontWeight: "800",
+    color: "#111827",
   },
-
   switchSub: {
-    ...typography.bodySmall,
-    color: colors.textSecondary,
+    fontSize: 12.5,
+    color: "#6B7280",
     lineHeight: 18,
+    marginTop: 2,
   },
 
-  switchButton: {
-    height: 42,
-    borderColor: colors.emerald,
+  switchBtn: {
+    height: 46,
+    borderRadius: 23,
+    backgroundColor: "#0A0A0C",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 3,
+  },
+  switchBtnPressed: {
+    transform: [{ scale: 0.98 }],
+    opacity: 0.9,
+  },
+  switchBtnText: {
+    fontSize: 14,
+    fontWeight: "800",
+    color: "#FFFFFF",
+    letterSpacing: 0.3,
   },
 
+  // ── Menu Container ────────────────────────────────────────────────────────
   menuContainer: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.lg,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 18,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: "#F3F4F6",
     overflow: "hidden",
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.03,
+    shadowRadius: 8,
+    elevation: 2,
   },
-
   menuItem: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: 16,
     paddingVertical: 14,
     borderBottomWidth: 1,
-    borderBottomColor: colors.borderSoft,
+    borderBottomColor: "#F3F4F6",
     gap: 12,
   },
-
   menuItemLast: {
     borderBottomWidth: 0,
   },
-
-  pressed: {
-    backgroundColor: colors.surfaceSoft,
+  menuIconBox: {
+    width: 34,
+    height: 34,
+    borderRadius: 10,
+    backgroundColor: "#F3F4F6",
+    alignItems: "center",
+    justifyContent: "center",
   },
-
   menuText: {
-    ...typography.titleMedium,
     fontSize: 14.5,
-    color: colors.textPrimary,
+    fontWeight: "700",
+    color: "#111827",
     flex: 1,
+  },
+  pressed: {
+    backgroundColor: "#F9FAFB",
   },
 });

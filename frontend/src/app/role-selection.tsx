@@ -56,7 +56,7 @@ function RoleCard({
           <Ionicons
             name={iconName}
             size={24}
-            color={selected ? colors.emerald : colors.textPrimary}
+            color={selected ? "#FFFFFF" : "#111827"}
           />
         </View>
 
@@ -68,13 +68,13 @@ function RoleCard({
             ]}
           >
             {selected && (
-              <Ionicons name="checkmark" size={14} color={colors.white} />
+              <Ionicons name="checkmark" size={14} color="#000000" />
             )}
           </View>
           <Ionicons
             name="chevron-forward"
             size={18}
-            color={selected ? colors.emerald : colors.textMuted}
+            color={selected ? "#0A0A0C" : "#9CA3AF"}
             style={styles.chevron}
           />
         </View>
@@ -172,12 +172,12 @@ export default function RoleSelectionScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: "#FFFFFF",
   },
 
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: "#FFFFFF",
     justifyContent: "space-between",
   },
 
@@ -196,18 +196,17 @@ const styles = StyleSheet.create({
   },
 
   brandDot: {
-    width: 7,
-    height: 7,
+    width: 8,
+    height: 8,
     borderRadius: 4,
-    backgroundColor: colors.emerald,
+    backgroundColor: "#F5B800",
   },
 
   brandName: {
-    ...typography.label,
     fontSize: 12,
-    letterSpacing: 1.8,
-    color: colors.primary,
-    fontWeight: "700",
+    letterSpacing: 2,
+    color: "#0A0A0C",
+    fontWeight: "800",
   },
 
   scrollContent: {
@@ -221,18 +220,17 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    ...typography.headlineLarge,
     fontSize: 28,
     lineHeight: 35,
-    color: colors.textPrimary,
+    fontWeight: "800",
+    color: "#111827",
     letterSpacing: -0.4,
   },
 
   subtitle: {
-    ...typography.bodyLarge,
     fontSize: 15,
     lineHeight: 22,
-    color: colors.textSecondary,
+    color: "#6B7280",
     marginTop: spacing.sm,
   },
 
@@ -241,12 +239,12 @@ const styles = StyleSheet.create({
   },
 
   card: {
-    backgroundColor: colors.surface,
+    backgroundColor: "#FFFFFF",
     borderRadius: 20,
     borderWidth: 1.5,
-    borderColor: colors.border,
+    borderColor: "#E5E7EB",
     padding: 22,
-    shadowColor: colors.black,
+    shadowColor: "#000000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.04,
     shadowRadius: 12,
@@ -254,11 +252,11 @@ const styles = StyleSheet.create({
   },
 
   cardSelected: {
-    borderColor: colors.emerald,
-    backgroundColor: colors.surface,
-    shadowColor: colors.emerald,
+    borderColor: "#0A0A0C",
+    backgroundColor: "#FFFFFF",
+    shadowColor: "#000000",
     shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.09,
+    shadowOpacity: 0.1,
     shadowRadius: 16,
     elevation: 4,
   },
@@ -278,16 +276,16 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: radius.md,
-    backgroundColor: colors.surfaceSoft,
+    backgroundColor: "#F3F4F6",
     borderWidth: 1,
-    borderColor: colors.borderSoft,
+    borderColor: "#E5E7EB",
     alignItems: "center",
     justifyContent: "center",
   },
 
   iconContainerSelected: {
-    backgroundColor: colors.emeraldSoft,
-    borderColor: "rgba(15, 118, 110, 0.2)",
+    backgroundColor: "#0A0A0C",
+    borderColor: "#0A0A0C",
   },
 
   cardHeaderRight: {
@@ -297,19 +295,19 @@ const styles = StyleSheet.create({
   },
 
   radioIndicator: {
-    width: 22,
-    height: 22,
-    borderRadius: 11,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: colors.border,
+    borderColor: "#D1D5DB",
     backgroundColor: "transparent",
     alignItems: "center",
     justifyContent: "center",
   },
 
   radioIndicatorSelected: {
-    backgroundColor: colors.emerald,
-    borderColor: colors.emerald,
+    backgroundColor: "#F5B800",
+    borderColor: "#F5B800",
   },
 
   chevron: {
@@ -317,27 +315,25 @@ const styles = StyleSheet.create({
   },
 
   cardTitle: {
-    ...typography.titleLarge,
     fontSize: 20,
-    lineHeight: 26,
-    color: colors.primary,
+    fontWeight: "800",
+    color: "#111827",
     marginTop: spacing.md,
   },
 
   cardDescription: {
-    ...typography.bodyMedium,
     fontSize: 14.5,
     lineHeight: 21,
-    color: colors.textSecondary,
+    color: "#6B7280",
     marginTop: 6,
   },
 
   bottomContainer: {
     paddingHorizontal: spacing.screen,
     paddingTop: spacing.md,
-    backgroundColor: colors.background,
+    backgroundColor: "#FFFFFF",
     borderTopWidth: 1,
-    borderTopColor: colors.borderSoft,
+    borderTopColor: "#F3F4F6",
   },
 
   continueButton: {
@@ -356,8 +352,8 @@ const styles = StyleSheet.create({
   },
 
   backText: {
-    ...typography.titleMedium,
     fontSize: 15,
-    color: colors.textSecondary,
+    fontWeight: "600",
+    color: "#6B7280",
   },
 });

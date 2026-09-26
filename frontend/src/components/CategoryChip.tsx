@@ -6,29 +6,28 @@ import {
   Text,
   ViewStyle,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 
 import { colors } from "../theme/colors";
 import { radius } from "../theme/radius";
-import { spacing } from "../theme/spacing";
 import { typography } from "../theme/typography";
 
 export type CategoryChipProps = {
   label: string;
   selected?: boolean;
   onPress: () => void;
-  iconName?: keyof typeof Ionicons.glyphMap;
   style?: StyleProp<ViewStyle>;
 };
 
 /**
- * CategoryChip - Pill chip used for event discovery & filter categories.
+ * CategoryChip — Fully-rounded capsule pill for category filtering.
+ *
+ * Active   → Solid amber fill (#F5B800), bold black text centered.
+ * Inactive → White fill, subtle grey border, centered dark text.
  */
 export function CategoryChip({
   label,
   selected = false,
   onPress,
-  iconName,
   style,
 }: CategoryChipProps) {
   return (
@@ -43,15 +42,6 @@ export function CategoryChip({
         style,
       ]}
     >
-      {iconName ? (
-        <Ionicons
-          name={iconName}
-          size={16}
-          color={selected ? colors.white : colors.textSecondary}
-          style={styles.icon}
-        />
-      ) : null}
-
       <Text
         style={[
           styles.label,
@@ -73,47 +63,50 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: 20,
     paddingVertical: 8,
   },
 
   chipSelected: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 2 },
+    backgroundColor: colors.amber,
+    borderColor: colors.amber,
+    borderWidth: 1,
+    shadowColor: colors.amber,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+
+  chipUnselected: {
+    backgroundColor: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.1,
     shadowRadius: 6,
     elevation: 3,
   },
 
-  chipUnselected: {
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-
   pressed: {
-    opacity: 0.9,
+    opacity: 0.88,
     transform: [{ scale: 0.97 }],
-  },
-
-  icon: {
-    marginRight: 6,
   },
 
   label: {
     ...typography.bodyMedium,
     fontSize: 13.5,
-    fontWeight: "500",
+    fontWeight: "600",
+    textAlign: "center",
   },
 
   labelSelected: {
-    color: colors.white,
-    fontWeight: "600",
+    color: "#000000",
+    fontWeight: "700",
   },
 
   labelUnselected: {
-    color: colors.textPrimary,
+    color: "#1E293B",
   },
 });

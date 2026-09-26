@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Share,
 } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { Image } from "expo-image";
@@ -12,20 +13,28 @@ import { router, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 import AppButton from "../../../components/AppButton";
-import StatusBadge from "../../../components/StatusBadge";
 import { MOCK_EVENTS } from "../../../data/mockEvents";
 import { colors } from "../../../theme/colors";
-import { radius } from "../../../theme/radius";
-import { spacing } from "../../../theme/spacing";
-import { typography } from "../../../theme/typography";
 
 export default function EventDetailsScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const event = MOCK_EVENTS.find((e) => e.id === id) || MOCK_EVENTS[0];
 
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isLiked, setIsLiked] = useState(true);
   const [showConfirmSheet, setShowConfirmSheet] = useState(false);
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const insets = useSafeAreaInsets();
+
+  const handleShare = async () => {
+    try {
+      await Share.share({
+        message: `Check out ${event.title} on EventGo!`,
+      });
+    } catch (e) {
+      // ignore
+    }
+  };
 
   const handleRegisterConfirm = () => {
     setShowConfirmSheet(false);
@@ -36,541 +45,747 @@ export default function EventDetailsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={["top"]}>
-      <View style={styles.container}>
-        <ScrollView
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-        >
-          {/* Hero Image Section */}
-          <View style={styles.heroContainer}>
-            <Image
-              source={{ uri: event.imageUrl }}
-              style={styles.heroImage}
-              contentFit="cover"
-            />
-            <View style={styles.heroOverlay} />
+    <View style={styles.root}>
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        bounces={false}
+      >
+        {/* ═══════════════════════════════════════════════════════════════════
+            § 1. HERO COVER IMAGE (Top ~40% Screen)
+            ═══════════════════════════════════════════════════════════════════ */}
+        <View style={styles.heroContainer}>
+          <Image
+            source={{ uri: event.imageUrl }}
+            style={styles.heroImage}
+            contentFit="cover"
+            transition={300}
+          />
+          <View style={styles.heroOverlay} />
 
-            {/* Top Bar Actions */}
-            <View style={styles.topBar}>
+          {/* Floating Top Navigation Bar */}
+          <SafeAreaView edges={["top"]} style={styles.topNavSafeArea}>
+            <View style={styles.topNav}>
+              {/* Back Button */}
               <Pressable
                 onPress={() => router.back()}
-                style={({ pressed }) => [styles.iconBtn, pressed && styles.pressed]}
+                style={({ pressed }) => [styles.glassBtn, pressed && styles.pressed]}
+                accessibilityLabel="Go back"
               >
-                <Ionicons name="arrow-back" size={20} color={colors.white} />
+                <Ionicons name="chevron-back" size={22} color="#FFF" />
               </Pressable>
 
-              <Pressable
-                onPress={() => setIsBookmarked((prev) => !prev)}
-                style={({ pressed }) => [styles.iconBtn, pressed && styles.pressed]}
-              >
-                <Ionicons
-                  name={isBookmarked ? "bookmark" : "bookmark-outline"}
-                  size={20}
-                  color={isBookmarked ? colors.gold : colors.white}
-                />
-              </Pressable>
-            </View>
+              {/* Right Action Glass Buttons */}
+              <View style={styles.topNavRight}>
+                {/* Share button */}
+                <Pressable
+                  onPress={handleShare}
+                  style={({ pressed }) => [styles.glassBtn, pressed && styles.pressed]}
+                  accessibilityLabel="Share event"
+                >
+                  <Ionicons name="share-social-outline" size={20} color="#FFF" />
+                </Pressable>
 
-            {/* Category Pill Tag */}
-            <View style={styles.heroCategoryPill}>
-              <Text style={styles.heroCategoryText}>{event.category}</Text>
+                {/* Favorite button */}
+                <Pressable
+                  onPress={() => setIsLiked((prev) => !prev)}
+                  style={({ pressed }) => [styles.glassBtn, pressed && styles.pressed]}
+                  accessibilityLabel="Favorite event"
+                >
+                  <Ionicons
+                    name={isLiked ? "heart" : "heart-outline"}
+                    size={20}
+                    color={isLiked ? "#EF4444" : "#FFF"}
+                  />
+                </Pressable>
+              </View>
             </View>
+          </SafeAreaView>
+
+          {/* Floating Status Pill (Bottom-left of hero cover) */}
+          <View style={styles.statusPill}>
+            <View style={styles.statusDot} />
+            <Text style={styles.statusText}>SELLING FAST</Text>
           </View>
-
-          {/* Details Body */}
-          <View style={styles.body}>
-            <View style={styles.statusRow}>
-              <StatusBadge status={event.status} />
-              <Text style={styles.priceText}>{event.price}</Text>
-            </View>
-
-            <Text style={styles.title}>{event.title}</Text>
-
-            {/* Organizer Row */}
-            <View style={styles.organizerRow}>
-              <Image
-                source={{
-                  uri:
-                    event.organizerAvatar ||
-                    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
-                }}
-                style={styles.organizerAvatar}
-                contentFit="cover"
-              />
-              <View style={styles.organizerInfo}>
-                <Text style={styles.organizerName}>{event.organizer}</Text>
-                <Text style={styles.organizerLabel}>Event Publisher</Text>
-              </View>
-            </View>
-
-            {/* Date & Time Info Card */}
-            <View style={styles.infoCard}>
-              <View style={styles.infoRow}>
-                <View style={styles.infoIconBox}>
-                  <Ionicons name="calendar-outline" size={20} color={colors.emerald} />
-                </View>
-                <View style={styles.infoTextGroup}>
-                  <Text style={styles.infoTitle}>{event.date}</Text>
-                  <Text style={styles.infoSub}>{event.time}</Text>
-                </View>
-              </View>
-
-              <View style={styles.infoDivider} />
-
-              <View style={styles.infoRow}>
-                <View style={styles.infoIconBox}>
-                  <Ionicons name="location-outline" size={20} color={colors.emerald} />
-                </View>
-                <View style={styles.infoTextGroup}>
-                  <Text style={styles.infoTitle}>{event.location}</Text>
-                  <Text style={styles.infoSub}>
-                    {event.isVirtual ? "Virtual Online Event" : "In-Person Campus Venue"}
-                  </Text>
-                </View>
-              </View>
-            </View>
-
-            {/* About / Description */}
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>About this event</Text>
-              <Text style={styles.descriptionText}>{event.description}</Text>
-            </View>
-
-            {/* Capacity Meter */}
-            <View style={styles.capacityCard}>
-              <View style={styles.capacityHeader}>
-                <Text style={styles.capacityTitle}>Registrations & Seats</Text>
-                <Text style={styles.capacityCount}>
-                  {event.attendeesCount} / {event.maxCapacity} Seats Filled
-                </Text>
-              </View>
-              <View style={styles.progressTrack}>
-                <View
-                  style={[
-                    styles.progressFill,
-                    {
-                      width: `${Math.min(
-                        (event.attendeesCount / event.maxCapacity) * 100,
-                        100
-                      )}%`,
-                    },
-                  ]}
-                />
-              </View>
-            </View>
-          </View>
-        </ScrollView>
-
-        {/* Bottom Floating Action Bar */}
-        <View style={[styles.bottomBar, { paddingBottom: Math.max(insets.bottom, 12) }]}>
-          <View style={styles.bottomPriceGroup}>
-            <Text style={styles.bottomPriceLabel}>Registration Fee</Text>
-            <Text style={styles.bottomPriceValue}>{event.price}</Text>
-          </View>
-
-          <AppButton
-            title="Register Now"
-            onPress={() => setShowConfirmSheet(true)}
-            style={styles.registerButton}
-          />
         </View>
 
-        {/* Confirmation Modal Sheet */}
-        {showConfirmSheet ? (
-          <View style={styles.sheetOverlay}>
-            <Pressable
-              style={styles.sheetBackdrop}
-              onPress={() => setShowConfirmSheet(false)}
-            />
-            <View style={styles.sheetContainer}>
-              <View style={styles.sheetHandle} />
-              <Text style={styles.sheetTitle}>Confirm Registration</Text>
-              <Text style={styles.sheetSub}>
-                You are about to register for{"\n"}
-                <Text style={{ fontWeight: "700", color: colors.primary }}>
-                  {event.title}
-                </Text>
-              </Text>
+        {/* ═══════════════════════════════════════════════════════════════════
+            § 2. SLIDING BOTTOM SHEET CONTAINER
+            ═══════════════════════════════════════════════════════════════════ */}
+        <View style={styles.sheetContent}>
+          {/* Top-Center Drag Handle */}
+          <View style={styles.dragHandle} />
 
-              <View style={styles.sheetSummaryCard}>
-                <View style={styles.sheetRow}>
-                  <Text style={styles.sheetRowLabel}>Date</Text>
-                  <Text style={styles.sheetRowVal}>{event.date}</Text>
+          {/* ── § 3. EVENT HEADER & METADATA ───────────────────────────── */}
+          <View style={styles.titlePriceRow}>
+            <Text style={styles.eventTitle} numberOfLines={2}>
+              {event.title}
+            </Text>
+
+            <View style={styles.pricePill}>
+              <Text style={styles.pricePillText}>{event.price}</Text>
+            </View>
+          </View>
+
+          <Text style={styles.subtitle}>
+            {event.category} • {event.location.split("•")[0].trim()}
+          </Text>
+
+          {/* Vertical Metadata List */}
+          <View style={styles.metadataList}>
+            {/* Venue Row */}
+            <View style={styles.metaItem}>
+              <View style={styles.metaIconBox}>
+                <Ionicons name="location" size={18} color="#FFFFFF" />
+              </View>
+              <Text style={styles.metaText} numberOfLines={2}>
+                {event.location}
+              </Text>
+            </View>
+
+            {/* Date & Time Row */}
+            <View style={styles.metaItem}>
+              <View style={styles.metaIconBox}>
+                <Ionicons name="calendar" size={18} color="#FFFFFF" />
+              </View>
+              <Text style={styles.metaText}>
+                {event.date} • {event.time}
+              </Text>
+            </View>
+          </View>
+
+          {/* ── § 4. SOCIAL PROOF / ATTENDEE CARD ───────────────────────── */}
+          <View style={styles.attendeeCard}>
+            <View style={styles.attendeeLeft}>
+              {/* Overlapping Avatar Stack */}
+              <View style={styles.avatarStack}>
+                <View style={[styles.avatarCircle, { backgroundColor: "#E5E7EB", zIndex: 4 }]}>
+                  <Text style={styles.avatarInitial}>TK</Text>
                 </View>
-                <View style={styles.sheetRow}>
-                  <Text style={styles.sheetRowLabel}>Time</Text>
-                  <Text style={styles.sheetRowVal}>{event.time.split("-")[0]}</Text>
+                <View style={[styles.avatarCircle, { backgroundColor: "#CBD5E1", marginLeft: -10, zIndex: 3 }]}>
+                  <Text style={styles.avatarInitial}>MR</Text>
                 </View>
-                <View style={styles.sheetRow}>
-                  <Text style={styles.sheetRowLabel}>Fee</Text>
-                  <Text style={styles.sheetRowVal}>{event.price}</Text>
+                <View style={[styles.avatarCircle, { backgroundColor: "#FEF08A", marginLeft: -10, zIndex: 2 }]}>
+                  <Text style={styles.avatarInitial}>SZ</Text>
+                </View>
+                <View style={[styles.avatarCircle, { backgroundColor: "#F5B800", marginLeft: -10, zIndex: 1 }]}>
+                  <Text style={styles.avatarBadgeText}>15k+</Text>
                 </View>
               </View>
 
-              <AppButton
-                title="Confirm Registration"
-                onPress={handleRegisterConfirm}
-                style={{ width: "100%", marginTop: spacing.md }}
-              />
+              {/* Members joined count text */}
+              <View style={styles.attendeeInfo}>
+                <Text style={styles.attendeeCount}>15.7k+</Text>
+                <Text style={styles.attendeeLabel}>Members joined</Text>
+              </View>
+            </View>
 
-              <Pressable
-                onPress={() => setShowConfirmSheet(false)}
-                style={styles.sheetCancelBtn}
-              >
-                <Text style={styles.sheetCancelText}>Cancel</Text>
+            {/* Invite Action Link */}
+            <Pressable
+              onPress={handleShare}
+              style={({ pressed }) => [styles.inviteBtn, pressed && styles.pressed]}
+            >
+              <Text style={styles.inviteText}>INVITE</Text>
+              <Ionicons name="chevron-forward" size={14} color="#D97706" />
+            </Pressable>
+          </View>
+
+          {/* ── § 5. ORGANIZER CARD ────────────────────────────────────── */}
+          <View style={styles.organizerCard}>
+            <View style={styles.organizerLeft}>
+              <View style={styles.organizerAvatarWrap}>
+                <Image
+                  source={{
+                    uri:
+                      event.organizerAvatar ||
+                      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+                  }}
+                  style={styles.organizerAvatarImg}
+                  contentFit="cover"
+                />
+                <View style={styles.onlineBadge} />
+              </View>
+
+              <View style={styles.organizerTextGroup}>
+                <Text style={styles.organizerName}>{event.organizer}</Text>
+                <Text style={styles.organizerRole}>Event Organiser & Promoter</Text>
+              </View>
+            </View>
+
+            {/* Action Buttons */}
+            <View style={styles.organizerActions}>
+              <Pressable style={({ pressed }) => [styles.orgActionCircle, pressed && styles.pressed]}>
+                <Ionicons name="chatbubble-ellipses-outline" size={17} color="#FFFFFF" />
+              </Pressable>
+
+              <Pressable style={({ pressed }) => [styles.orgActionCircle, pressed && styles.pressed]}>
+                <Ionicons name="call-outline" size={17} color="#FFFFFF" />
               </Pressable>
             </View>
           </View>
-        ) : null}
+
+          {/* ── § 6. DESCRIPTION SECTION ───────────────────────────────── */}
+          <View style={styles.descSection}>
+            <Text style={styles.descTitle}>Description</Text>
+            <Text
+              style={styles.descText}
+              numberOfLines={isDescriptionExpanded ? undefined : 4}
+            >
+              {event.description}
+            </Text>
+            {!isDescriptionExpanded && (
+              <Pressable onPress={() => setIsDescriptionExpanded(true)}>
+                <Text style={styles.readMoreText}>... Read More</Text>
+              </Pressable>
+            )}
+          </View>
+        </View>
+      </ScrollView>
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          § 7. FIXED BOTTOM ACTION DOCK
+          ═══════════════════════════════════════════════════════════════════ */}
+      <View style={[styles.bottomDock, { paddingBottom: Math.max(insets.bottom, 14) }]}>
+        {/* Bookmark / Save Button */}
+        <Pressable
+          onPress={() => setIsBookmarked((prev) => !prev)}
+          style={({ pressed }) => [
+            styles.bookmarkSquareBtn,
+            isBookmarked && styles.bookmarkSquareActive,
+            pressed && styles.pressed,
+          ]}
+          accessibilityLabel="Save event"
+        >
+          <Ionicons
+            name={isBookmarked ? "bookmark" : "bookmark-outline"}
+            size={22}
+            color={isBookmarked ? "#F5B800" : "#FFFFFF"}
+          />
+        </Pressable>
+
+        {/* Primary CTA Button: BUY A TICKET */}
+        <Pressable
+          onPress={() => setShowConfirmSheet(true)}
+          style={({ pressed }) => [styles.buyTicketBtn, pressed && styles.buyTicketPressed]}
+          accessibilityRole="button"
+          accessibilityLabel="Buy a ticket"
+        >
+          <Ionicons name="ticket-outline" size={20} color="#F5B800" />
+          <Text style={styles.buyTicketText}>BUY A TICKET</Text>
+        </Pressable>
       </View>
-    </SafeAreaView>
+
+      {/* Confirmation Modal Sheet */}
+      {showConfirmSheet && (
+        <View style={styles.sheetOverlay}>
+          <Pressable
+            style={styles.sheetBackdrop}
+            onPress={() => setShowConfirmSheet(false)}
+          />
+          <View style={styles.sheetContainer}>
+            <View style={styles.sheetHandle} />
+            <Text style={styles.sheetTitle}>Confirm Registration</Text>
+            <Text style={styles.sheetSub}>
+              You are about to register for{"\n"}
+              <Text style={{ fontWeight: "700", color: "#111827" }}>
+                {event.title}
+              </Text>
+            </Text>
+
+            <View style={styles.sheetSummaryCard}>
+              <View style={styles.sheetRow}>
+                <Text style={styles.sheetRowLabel}>Date</Text>
+                <Text style={styles.sheetRowVal}>{event.date}</Text>
+              </View>
+              <View style={styles.sheetRow}>
+                <Text style={styles.sheetRowLabel}>Time</Text>
+                <Text style={styles.sheetRowVal}>{event.time}</Text>
+              </View>
+              <View style={styles.sheetRow}>
+                <Text style={styles.sheetRowLabel}>Fee</Text>
+                <Text style={styles.sheetRowVal}>{event.price}</Text>
+              </View>
+            </View>
+
+            <AppButton
+              title="Confirm & Book"
+              onPress={handleRegisterConfirm}
+              style={{ width: "100%", marginTop: 16 }}
+            />
+
+            <Pressable
+              onPress={() => setShowConfirmSheet(false)}
+              style={styles.sheetCancelBtn}
+            >
+              <Text style={styles.sheetCancelText}>Cancel</Text>
+            </Pressable>
+          </View>
+        </View>
+      )}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
+  root: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: "#FFFFFF",
   },
-
-  container: {
+  scroll: {
     flex: 1,
+    backgroundColor: "#FFFFFF",
   },
-
   scrollContent: {
-    paddingBottom: 100,
+    paddingBottom: 110,
   },
 
+  // ── § 1. Hero Cover Image ────────────────────────────────────────────────
   heroContainer: {
-    height: 260,
+    height: 320,
     width: "100%",
     position: "relative",
-    backgroundColor: colors.primary,
+    backgroundColor: "#0A0A0C",
   },
-
   heroImage: {
     width: "100%",
     height: "100%",
   },
-
   heroOverlay: {
-    ...StyleSheet.absoluteFill,
-    backgroundColor: "rgba(18, 19, 22, 0.4)",
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0, 0, 0, 0.25)",
   },
-
-  topBar: {
+  topNavSafeArea: {
     position: "absolute",
-    top: spacing.md,
-    left: spacing.screen,
-    right: spacing.screen,
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 10,
+  },
+  topNav: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    paddingHorizontal: 16,
+    paddingTop: 8,
   },
-
-  iconBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "rgba(18, 19, 22, 0.65)",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  pressed: {
-    opacity: 0.7,
-  },
-
-  heroCategoryPill: {
-    position: "absolute",
-    bottom: spacing.md,
-    left: spacing.screen,
-    backgroundColor: colors.emerald,
-    paddingHorizontal: 12,
-    paddingVertical: 5,
-    borderRadius: radius.full,
-  },
-
-  heroCategoryText: {
-    ...typography.label,
-    fontSize: 11.5,
-    color: colors.white,
-  },
-
-  body: {
-    paddingHorizontal: spacing.screen,
-    paddingTop: spacing.lg,
-  },
-
-  statusRow: {
+  topNavRight: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: spacing.xs,
+    gap: 10,
   },
-
-  priceText: {
-    ...typography.titleLarge,
-    fontSize: 18,
-    color: colors.emerald,
-    fontWeight: "700",
-  },
-
-  title: {
-    ...typography.headlineLarge,
-    fontSize: 24,
-    lineHeight: 32,
-    color: colors.textPrimary,
-    marginBottom: spacing.md,
-  },
-
-  organizerRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    paddingBottom: spacing.md,
-    marginBottom: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.borderSoft,
-  },
-
-  organizerAvatar: {
+  glassBtn: {
     width: 44,
     height: 44,
     borderRadius: 22,
-  },
-
-  organizerInfo: {
-    flex: 1,
-  },
-
-  organizerName: {
-    ...typography.titleMedium,
-    fontSize: 15,
-    color: colors.textPrimary,
-  },
-
-  organizerLabel: {
-    ...typography.bodySmall,
-    color: colors.textSecondary,
-  },
-
-  infoCard: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.lg,
+    backgroundColor: "rgba(0, 0, 0, 0.45)",
+    alignItems: "center",
+    justifyContent: "center",
     borderWidth: 1,
-    borderColor: colors.border,
-    padding: spacing.md,
-    marginBottom: spacing.lg,
+    borderColor: "rgba(255, 255, 255, 0.15)",
+  },
+  pressed: {
+    opacity: 0.8,
+    transform: [{ scale: 0.96 }],
   },
 
-  infoRow: {
+  statusPill: {
+    position: "absolute",
+    bottom: 48,
+    left: 20,
     flexDirection: "row",
     alignItems: "center",
-    gap: 14,
+    gap: 6,
+    backgroundColor: "rgba(0, 0, 0, 0.65)",
+    borderColor: "#E5A910",
+    borderWidth: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 50,
+  },
+  statusDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: "#F5B800",
+  },
+  statusText: {
+    fontSize: 10.5,
+    fontWeight: "800",
+    color: "#F5B800",
+    letterSpacing: 0.8,
   },
 
-  infoIconBox: {
-    width: 42,
-    height: 42,
-    borderRadius: radius.md,
-    backgroundColor: colors.emeraldSoft,
+  // ── § 2. Sliding Bottom Sheet Container ─────────────────────────────────
+  sheetContent: {
+    marginTop: -32,
+    backgroundColor: "#FFFFFF",
+    borderTopLeftRadius: 36,
+    borderTopRightRadius: 36,
+    paddingHorizontal: 24,
+    paddingTop: 12,
+    paddingBottom: 20,
+  },
+  dragHandle: {
+    width: 44,
+    height: 4,
+    backgroundColor: "#D1D5DB",
+    borderRadius: 9999,
+    alignSelf: "center",
+    marginBottom: 16,
+  },
+
+  // ── § 3. Event Header & Metadata ────────────────────────────────────────
+  titlePriceRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  eventTitle: {
+    flex: 1,
+    fontSize: 22,
+    fontWeight: "800",
+    color: "#111827",
+    lineHeight: 28,
+  },
+  pricePill: {
+    backgroundColor: "#0A0A0C",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 14,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 3,
+  },
+  pricePillText: {
+    fontSize: 15,
+    fontWeight: "800",
+    color: "#FFFFFF",
+  },
+  subtitle: {
+    fontSize: 14,
+    color: "#6B7280",
+    fontWeight: "500",
+    marginTop: 4,
+    marginBottom: 16,
+  },
+
+  metadataList: {
+    gap: 12,
+    marginBottom: 20,
+  },
+  metaItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  metaIconBox: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: "#0A0A0C",
     alignItems: "center",
     justifyContent: "center",
   },
+  metaText: {
+    flex: 1,
+    fontSize: 14,
+    fontWeight: "700",
+    color: "#111827",
+  },
 
-  infoTextGroup: {
+  // ── § 4. Social Proof / Attendee Card ────────────────────────────────────
+  attendeeCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#FAFAFA",
+    borderWidth: 1,
+    borderColor: "#F3F4F6",
+    borderRadius: 20,
+    paddingHorizontal: 18,
+    paddingVertical: 14,
+    marginBottom: 16,
+  },
+  attendeeLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  avatarStack: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  avatarCircle: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 2,
+    borderColor: "#FFFFFF",
+  },
+  avatarInitial: {
+    fontSize: 10,
+    fontWeight: "800",
+    color: "#374151",
+  },
+  avatarBadgeText: {
+    fontSize: 9.5,
+    fontWeight: "800",
+    color: "#111827",
+  },
+  attendeeInfo: {
+    gap: 1,
+  },
+  attendeeCount: {
+    fontSize: 15,
+    fontWeight: "800",
+    color: "#111827",
+  },
+  attendeeLabel: {
+    fontSize: 12,
+    color: "#6B7280",
+    fontWeight: "500",
+  },
+  inviteBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 2,
+  },
+  inviteText: {
+    fontSize: 13.5,
+    fontWeight: "800",
+    color: "#D97706",
+    letterSpacing: 0.5,
+  },
+
+  // ── § 5. Organizer Card ─────────────────────────────────────────────────
+  organizerCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+    borderRadius: 20,
+    paddingHorizontal: 18,
+    paddingVertical: 14,
+    marginBottom: 20,
+  },
+  organizerLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
     flex: 1,
   },
-
-  infoTitle: {
-    ...typography.titleMedium,
-    fontSize: 14.5,
-    color: colors.textPrimary,
+  organizerAvatarWrap: {
+    position: "relative",
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    borderWidth: 2,
+    borderColor: "#F5B800",
+    padding: 1,
   },
-
-  infoSub: {
-    ...typography.bodySmall,
-    color: colors.textSecondary,
-    marginTop: 2,
+  organizerAvatarImg: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 20,
   },
-
-  infoDivider: {
-    height: 1,
-    backgroundColor: colors.borderSoft,
-    marginVertical: spacing.md,
+  onlineBadge: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    width: 11,
+    height: 11,
+    borderRadius: 6,
+    backgroundColor: "#10B981",
+    borderWidth: 2,
+    borderColor: "#FFFFFF",
   },
-
-  section: {
-    marginBottom: spacing.lg,
+  organizerTextGroup: {
+    flex: 1,
   },
-
-  sectionTitle: {
-    ...typography.titleLarge,
-    fontSize: 17,
-    color: colors.textPrimary,
-    marginBottom: spacing.xs,
+  organizerName: {
+    fontSize: 15,
+    fontWeight: "800",
+    color: "#111827",
   },
-
-  descriptionText: {
-    ...typography.bodyLarge,
-    fontSize: 14.5,
-    lineHeight: 22,
-    color: colors.textSecondary,
+  organizerRole: {
+    fontSize: 12,
+    color: "#6B7280",
+    fontWeight: "500",
+    marginTop: 1,
   },
-
-  capacityCard: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.borderSoft,
-    padding: spacing.md,
-    marginBottom: spacing.lg,
-  },
-
-  capacityHeader: {
+  organizerActions: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
+    gap: 8,
+  },
+  orgActionCircle: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#0A0A0C",
+  },
+
+  // ── § 6. Description Section ─────────────────────────────────────────────
+  descSection: {
+    marginTop: 4,
+    marginBottom: 16,
+  },
+  descTitle: {
+    fontSize: 16,
+    fontWeight: "800",
+    color: "#111827",
     marginBottom: 8,
   },
-
-  capacityTitle: {
-    ...typography.titleMedium,
+  descText: {
     fontSize: 14,
-    color: colors.textPrimary,
+    lineHeight: 22,
+    color: "#4B5563",
+  },
+  readMoreText: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: "#D97706",
+    marginTop: 4,
   },
 
-  capacityCount: {
-    ...typography.label,
-    fontSize: 11.5,
-    color: colors.emerald,
-  },
-
-  progressTrack: {
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: colors.surfaceSoft,
-    overflow: "hidden",
-  },
-
-  progressFill: {
-    height: "100%",
-    backgroundColor: colors.emerald,
-    borderRadius: 3,
-  },
-
-  bottomBar: {
+  // ── § 7. Fixed Bottom Action Dock ────────────────────────────────────────
+  bottomDock: {
     position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: colors.surface,
+    backgroundColor: "#FFFFFF",
     borderTopWidth: 1,
-    borderTopColor: colors.borderSoft,
-    paddingHorizontal: spacing.screen,
+    borderColor: "#F3F4F6",
+    paddingHorizontal: 20,
     paddingTop: 12,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    gap: spacing.md,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 10,
   },
-
-  bottomPriceGroup: {
-    gap: 2,
+  bookmarkSquareBtn: {
+    width: 54,
+    height: 54,
+    borderRadius: 16,
+    backgroundColor: "#0A0A0C",
+    alignItems: "center",
+    justifyContent: "center",
   },
-
-  bottomPriceLabel: {
-    ...typography.bodySmall,
-    fontSize: 11.5,
-    color: colors.textSecondary,
+  bookmarkSquareActive: {
+    backgroundColor: "#0A0A0C",
+    borderWidth: 1.5,
+    borderColor: "#F5B800",
   },
-
-  bottomPriceValue: {
-    ...typography.titleLarge,
-    fontSize: 20,
-    color: colors.primary,
-    fontWeight: "700",
-  },
-
-  registerButton: {
+  buyTicketBtn: {
     flex: 1,
+    height: 54,
+    borderRadius: 16,
+    backgroundColor: "#0A0A0C",
+    marginLeft: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 4,
+  },
+  buyTicketPressed: {
+    transform: [{ scale: 0.98 }],
+    opacity: 0.9,
+  },
+  buyTicketText: {
+    fontSize: 15,
+    fontWeight: "800",
+    color: "#FFFFFF",
+    letterSpacing: 0.5,
   },
 
+  // ── Modal Confirmation Sheet ────────────────────────────────────────────
   sheetOverlay: {
-    ...StyleSheet.absoluteFill,
+    ...StyleSheet.absoluteFillObject,
     zIndex: 100,
     justifyContent: "flex-end",
   },
-
   sheetBackdrop: {
-    ...StyleSheet.absoluteFill,
+    ...StyleSheet.absoluteFillObject,
     backgroundColor: "rgba(0,0,0,0.5)",
   },
-
   sheetContainer: {
-    backgroundColor: colors.surface,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    padding: spacing.xl,
+    backgroundColor: "#FFFFFF",
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    padding: 24,
     alignItems: "center",
   },
-
   sheetHandle: {
-    width: 36,
+    width: 40,
     height: 4,
     borderRadius: 2,
-    backgroundColor: colors.border,
-    marginBottom: spacing.md,
+    backgroundColor: "#E5E7EB",
+    marginBottom: 16,
   },
-
   sheetTitle: {
-    ...typography.headlineMedium,
-    color: colors.textPrimary,
+    fontSize: 20,
+    fontWeight: "800",
+    color: "#111827",
   },
-
   sheetSub: {
-    ...typography.bodyMedium,
-    color: colors.textSecondary,
+    fontSize: 14,
+    color: "#6B7280",
     textAlign: "center",
-    marginTop: spacing.xs,
+    marginTop: 4,
     lineHeight: 20,
   },
-
   sheetSummaryCard: {
     width: "100%",
-    backgroundColor: colors.surfaceSoft,
-    borderRadius: radius.md,
-    padding: spacing.md,
-    marginTop: spacing.md,
+    backgroundColor: "#F9FAFB",
+    borderRadius: 16,
+    padding: 16,
+    marginTop: 16,
     gap: 8,
+    borderWidth: 1,
+    borderColor: "#F3F4F6",
   },
-
   sheetRow: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
-
   sheetRowLabel: {
-    ...typography.bodySmall,
-    color: colors.textSecondary,
+    fontSize: 13,
+    color: "#6B7280",
   },
-
   sheetRowVal: {
-    ...typography.titleMedium,
     fontSize: 13.5,
-    color: colors.primary,
+    fontWeight: "700",
+    color: "#111827",
   },
-
   sheetCancelBtn: {
-    marginTop: spacing.sm,
+    marginTop: 12,
     paddingVertical: 10,
   },
-
   sheetCancelText: {
-    ...typography.titleMedium,
     fontSize: 14,
-    color: colors.textSecondary,
+    fontWeight: "600",
+    color: "#6B7280",
   },
 });
+
