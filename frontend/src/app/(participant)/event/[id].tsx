@@ -352,7 +352,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   heroOverlay: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: "rgba(0, 0, 0, 0.25)",
   },
   topNavSafeArea: {
@@ -721,12 +721,12 @@ const styles = StyleSheet.create({
 
   // ── Modal Confirmation Sheet ────────────────────────────────────────────
   sheetOverlay: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     zIndex: 100,
     justifyContent: "flex-end",
   },
   sheetBackdrop: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: "rgba(0,0,0,0.5)",
   },
   sheetContainer: {

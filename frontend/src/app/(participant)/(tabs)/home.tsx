@@ -558,7 +558,7 @@ const nearS = StyleSheet.create({
     justifyContent: "center",
   },
   thumbOverlay: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: "rgba(10,10,12,0.5)",
   },
   datePill: {
