@@ -6,6 +6,7 @@ import {
   Text,
   View,
   Dimensions,
+  Modal,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
@@ -727,6 +728,7 @@ const secS = StyleSheet.create({
 
 export default function ParticipantHomeScreen() {
   const [selectedCategory, setSelectedCategory] = useState<EventCategory>("All");
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { onScroll, onScrollEnd } = useNavScroll();
 
   const featuredEvents = MOCK_EVENTS.filter((e) => e.featured);
@@ -768,7 +770,11 @@ export default function ParticipantHomeScreen() {
             <View style={s.heroContent}>
               {/* Top Bar: Menu | Location | Notifications */}
               <View style={s.topBar}>
-                <Pressable style={s.iconCircle} accessibilityLabel="Menu">
+                <Pressable
+                  style={s.iconCircle}
+                  onPress={() => setIsDrawerOpen(true)}
+                  accessibilityLabel="Menu"
+                >
                   <Ionicons name="menu" size={20} color="#FFF" />
                 </Pressable>
 
@@ -895,9 +901,227 @@ export default function ParticipantHomeScreen() {
           ))}
         </View>
       </ScrollView>
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          § LEFT SIDEBAR NAVIGATION DRAWER (Appears from left)
+          ═══════════════════════════════════════════════════════════════════ */}
+      <Modal
+        visible={isDrawerOpen}
+        animationType="fade"
+        transparent
+        onRequestClose={() => setIsDrawerOpen(false)}
+      >
+        <View style={drawerS.modalRoot}>
+          {/* Backdrop Overlay */}
+          <Pressable
+            style={drawerS.backdrop}
+            onPress={() => setIsDrawerOpen(false)}
+          />
+
+          {/* Left Slide Panel */}
+          <View style={drawerS.panel}>
+            <SafeAreaView edges={["top", "bottom"]} style={drawerS.panelSafe}>
+              {/* Profile Avatar & Name */}
+              <View style={drawerS.userSection}>
+                <Image
+                  source={{ uri: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80" }}
+                  style={drawerS.avatar}
+                  contentFit="cover"
+                />
+                <Text style={drawerS.userName}>Alex Morgan</Text>
+              </View>
+
+              {/* Drawer Menu List */}
+              <ScrollView showsVerticalScrollIndicator={false} style={drawerS.menuScroll}>
+                <Pressable
+                  onPress={() => {
+                    setIsDrawerOpen(false);
+                    router.push("/(participant)/(tabs)/profile" as any);
+                  }}
+                  style={({ pressed }) => [drawerS.item, pressed && drawerS.pressed]}
+                >
+                  <Ionicons name="person-outline" size={22} color="#111827" />
+                  <Text style={drawerS.itemText}>My Profile</Text>
+                </Pressable>
+
+                <Pressable
+                  onPress={() => {
+                    setIsDrawerOpen(false);
+                    router.push("/(participant)/notifications" as any);
+                  }}
+                  style={({ pressed }) => [drawerS.item, pressed && drawerS.pressed]}
+                >
+                  <View style={drawerS.iconWrap}>
+                    <Ionicons name="chatbubble-ellipses-outline" size={22} color="#111827" />
+                    <View style={drawerS.badge}>
+                      <Text style={drawerS.badgeText}>3</Text>
+                    </View>
+                  </View>
+                  <Text style={drawerS.itemText}>Massage</Text>
+                </Pressable>
+
+                <Pressable
+                  onPress={() => {
+                    setIsDrawerOpen(false);
+                    router.push("/(participant)/calendar" as any);
+                  }}
+                  style={({ pressed }) => [drawerS.item, pressed && drawerS.pressed]}
+                >
+                  <Ionicons name="calendar-outline" size={22} color="#111827" />
+                  <Text style={drawerS.itemText}>Calender</Text>
+                </Pressable>
+
+                <Pressable
+                  onPress={() => {
+                    setIsDrawerOpen(false);
+                    router.push("/(participant)/(tabs)/explore" as any);
+                  }}
+                  style={({ pressed }) => [drawerS.item, pressed && drawerS.pressed]}
+                >
+                  <Ionicons name="bookmark-outline" size={22} color="#111827" />
+                  <Text style={drawerS.itemText}>Bookmark</Text>
+                </Pressable>
+
+                <Pressable
+                  onPress={() => {
+                    setIsDrawerOpen(false);
+                    router.push("/(participant)/notifications" as any);
+                  }}
+                  style={({ pressed }) => [drawerS.item, pressed && drawerS.pressed]}
+                >
+                  <Ionicons name="mail-outline" size={22} color="#111827" />
+                  <Text style={drawerS.itemText}>Contact Us</Text>
+                </Pressable>
+
+                <Pressable
+                  onPress={() => {
+                    setIsDrawerOpen(false);
+                    router.push("/(participant)/(tabs)/profile" as any);
+                  }}
+                  style={({ pressed }) => [drawerS.item, pressed && drawerS.pressed]}
+                >
+                  <Ionicons name="settings-outline" size={22} color="#111827" />
+                  <Text style={drawerS.itemText}>Settings</Text>
+                </Pressable>
+
+                <Pressable
+                  onPress={() => {
+                    setIsDrawerOpen(false);
+                    router.push("/(participant)/(tabs)/profile" as any);
+                  }}
+                  style={({ pressed }) => [drawerS.item, pressed && drawerS.pressed]}
+                >
+                  <Ionicons name="help-circle-outline" size={22} color="#111827" />
+                  <Text style={drawerS.itemText}>Helps & FAQs</Text>
+                </Pressable>
+
+                <Pressable
+                  onPress={() => {
+                    setIsDrawerOpen(false);
+                    router.replace("/role-selection" as any);
+                  }}
+                  style={({ pressed }) => [drawerS.item, drawerS.itemSignOut, pressed && drawerS.pressed]}
+                >
+                  <Ionicons name="log-out-outline" size={22} color="#111827" />
+                  <Text style={drawerS.itemText}>Sign Out</Text>
+                </Pressable>
+              </ScrollView>
+            </SafeAreaView>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
+
+const drawerS = StyleSheet.create({
+  modalRoot: {
+    flex: 1,
+    flexDirection: "row",
+  },
+  backdrop: {
+    ...StyleSheet.absoluteFill,
+    backgroundColor: "rgba(0, 0, 0, 0.45)",
+  },
+  panel: {
+    width: "76%",
+    height: "100%",
+    backgroundColor: "#FFFFFF",
+    shadowColor: "#000000",
+    shadowOffset: { width: 4, height: 0 },
+    shadowOpacity: 0.15,
+    shadowRadius: 16,
+    elevation: 12,
+    borderTopRightRadius: 28,
+    borderBottomRightRadius: 28,
+    overflow: "hidden",
+  },
+  panelSafe: {
+    flex: 1,
+    paddingHorizontal: 24,
+    paddingTop: 36,
+    paddingBottom: 24,
+  },
+  userSection: {
+    marginBottom: 28,
+    marginTop: 8,
+  },
+  avatar: {
+    width: 68,
+    height: 68,
+    borderRadius: 34,
+    backgroundColor: "#F3F4F6",
+    marginBottom: 14,
+  },
+  userName: {
+    fontSize: 20,
+    fontWeight: "800",
+    color: "#111827",
+  },
+  menuScroll: {
+    flex: 1,
+  },
+  item: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 14,
+    gap: 16,
+  },
+  itemSignOut: {
+    marginTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: "#F3F4F6",
+    paddingTop: 18,
+  },
+  itemText: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#111827",
+  },
+  iconWrap: {
+    position: "relative",
+  },
+  badge: {
+    position: "absolute",
+    top: -4,
+    right: -6,
+    backgroundColor: "#F5B800",
+    borderRadius: 8,
+    minWidth: 16,
+    height: 16,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 3,
+  },
+  badgeText: {
+    fontSize: 9.5,
+    fontWeight: "800",
+    color: "#000000",
+  },
+  pressed: {
+    opacity: 0.7,
+  },
+});
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // § STYLES

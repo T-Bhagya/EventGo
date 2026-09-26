@@ -111,7 +111,7 @@ export default function PublishedEventsScreen() {
 
               <View style={styles.cardFooter}>
                 <Text style={styles.manageLink}>Manage Registrations & Attendance</Text>
-                <Ionicons name="chevron-forward" size={16} color={colors.emerald} />
+                <Ionicons name="chevron-forward" size={16} color="#0A0A0C" />
               </View>
             </Pressable>
           )}
@@ -138,13 +138,16 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    ...typography.headlineLarge,
-    color: colors.textPrimary,
+    fontSize: 22,
+    fontWeight: "800",
+    color: "#111827",
+    letterSpacing: -0.3,
   },
 
   subtitle: {
-    ...typography.bodyMedium,
-    color: colors.textSecondary,
+    fontSize: 13,
+    fontWeight: "500",
+    color: "#6B7280",
     marginTop: 2,
   },
 
@@ -165,8 +168,8 @@ const styles = StyleSheet.create({
   },
 
   pillActive: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
+    backgroundColor: "#0A0A0C",
+    borderColor: "#0A0A0C",
   },
 
   pillText: {
@@ -176,13 +179,13 @@ const styles = StyleSheet.create({
   },
 
   pillTextActive: {
-    color: colors.white,
+    color: "#FFFFFF",
     fontWeight: "600",
   },
 
   listContent: {
     paddingHorizontal: spacing.screen,
-    paddingBottom: spacing.xl,
+    paddingBottom: 110,
     gap: spacing.md,
   },
 
@@ -209,7 +212,7 @@ const styles = StyleSheet.create({
   priceTag: {
     ...typography.titleMedium,
     fontSize: 14,
-    color: colors.emerald,
+    color: "#0A0A0C",
     fontWeight: "700",
   },
 
@@ -264,7 +267,7 @@ const styles = StyleSheet.create({
   manageLink: {
     ...typography.titleMedium,
     fontSize: 13.5,
-    color: colors.emerald,
-    fontWeight: "600",
+    color: "#0A0A0C",
+    fontWeight: "700",
   },
 });

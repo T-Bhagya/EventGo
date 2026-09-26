@@ -65,9 +65,10 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    ...typography.titleLarge,
     fontSize: 19,
+    fontWeight: "800",
     color: colors.textPrimary,
+    letterSpacing: -0.2,
   },
 
   subtitle: {

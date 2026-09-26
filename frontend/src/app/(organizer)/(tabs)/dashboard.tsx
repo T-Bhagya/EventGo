@@ -221,9 +221,10 @@ const styles = StyleSheet.create({
   },
 
   greetingTitle: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "800",
     color: "#111827",
+    letterSpacing: -0.3,
   },
 
   switchPill: {
@@ -358,7 +359,7 @@ const styles = StyleSheet.create({
 
   progressFill: {
     height: "100%",
-    backgroundColor: "#0A0A0C",
+    backgroundColor: "#F5B800",
     borderRadius: 3,
   },
 

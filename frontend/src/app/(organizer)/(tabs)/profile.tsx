@@ -48,7 +48,7 @@ export default function OrganizerProfileScreen() {
           />
 
           <View style={styles.verifiedBadge}>
-            <Ionicons name="checkmark-done-circle" size={14} color={colors.emerald} />
+            <Ionicons name="checkmark-done-circle" size={14} color="#F5B800" />
             <Text style={styles.verifiedText}>Verified Publisher</Text>
           </View>
 
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: spacing.screen,
     paddingTop: spacing.xs,
-    paddingBottom: spacing.xl,
+    paddingBottom: 110,
   },
 
   header: {
@@ -117,8 +117,10 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    ...typography.headlineLarge,
-    color: colors.textPrimary,
+    fontSize: 22,
+    fontWeight: "800",
+    color: "#111827",
+    letterSpacing: -0.3,
   },
 
   profileCard: {
@@ -142,7 +144,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
-    backgroundColor: colors.emeraldSoft,
+    backgroundColor: "#FFFDF0",
+    borderWidth: 1,
+    borderColor: "rgba(245, 184, 0, 0.3)",
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: radius.full,
@@ -152,7 +156,8 @@ const styles = StyleSheet.create({
   verifiedText: {
     ...typography.label,
     fontSize: 11,
-    color: colors.emerald,
+    color: "#0A0A0C",
+    fontWeight: "700",
   },
 
   name: {

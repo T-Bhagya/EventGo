@@ -27,27 +27,27 @@ const STATUS_CONFIG: Record<
 > = {
   upcoming: {
     label: "Upcoming",
-    bg: colors.emeraldSoft,
-    text: colors.emerald,
-    dot: colors.emerald,
+    bg: "#F5B800",
+    text: "#000000",
+    dot: "#000000",
   },
   ongoing: {
     label: "Live Now",
-    bg: "#FFF7ED",
-    text: "#C2410C",
-    dot: "#EA580C",
+    bg: "#F5B800",
+    text: "#000000",
+    dot: "#000000",
   },
   live: {
     label: "Live Now",
-    bg: "#FFF7ED",
-    text: "#C2410C",
-    dot: "#EA580C",
+    bg: "#F5B800",
+    text: "#000000",
+    dot: "#000000",
   },
   registered: {
     label: "Registered",
-    bg: colors.emeraldSoft,
-    text: colors.emerald,
-    dot: colors.emeraldBright,
+    bg: "#F5B800",
+    text: "#000000",
+    dot: "#000000",
   },
   completed: {
     label: "Completed",
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   text: {
     ...typography.label,
     fontSize: 11.5,
-    fontWeight: "600",
+    fontWeight: "700",
     letterSpacing: 0.2,
   },
 });

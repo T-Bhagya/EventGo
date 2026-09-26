@@ -45,8 +45,8 @@ export default function OrganizerAnalyticsScreen() {
               <Text style={styles.barLabel}>Tue</Text>
             </View>
             <View style={styles.chartBarCol}>
-              <View style={[styles.bar, { height: 130, backgroundColor: colors.emerald }]} />
-              <Text style={styles.barLabel}>Wed</Text>
+              <View style={[styles.bar, { height: 130, backgroundColor: "#F5B800" }]} />
+              <Text style={[styles.barLabel, { color: "#0A0A0C", fontWeight: "700" }]}>Wed</Text>
             </View>
             <View style={styles.chartBarCol}>
               <View style={[styles.bar, { height: 80 }]} />
@@ -69,17 +69,17 @@ export default function OrganizerAnalyticsScreen() {
 
           <View style={styles.channelCard}>
             <View style={styles.channelRow}>
-              <Ionicons name="link-outline" size={18} color={colors.emerald} />
+              <Ionicons name="link-outline" size={18} color="#0A0A0C" />
               <Text style={styles.channelName}>Campus Direct Link</Text>
               <Text style={styles.channelVal}>64%</Text>
             </View>
             <View style={styles.channelRow}>
-              <Ionicons name="compass-outline" size={18} color={colors.gold} />
+              <Ionicons name="compass-outline" size={18} color="#F5B800" />
               <Text style={styles.channelName}>EventGo Discovery Feed</Text>
               <Text style={styles.channelVal}>26%</Text>
             </View>
             <View style={styles.channelRow}>
-              <Ionicons name="share-social-outline" size={18} color={colors.primary} />
+              <Ionicons name="share-social-outline" size={18} color="#0A0A0C" />
               <Text style={styles.channelName}>Social & Referral Invites</Text>
               <Text style={styles.channelVal}>10%</Text>
             </View>
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: spacing.screen,
     paddingTop: spacing.xs,
-    paddingBottom: spacing.xl,
+    paddingBottom: 110,
   },
 
   header: {
@@ -107,13 +107,16 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    ...typography.headlineLarge,
-    color: colors.textPrimary,
+    fontSize: 22,
+    fontWeight: "800",
+    color: "#111827",
+    letterSpacing: -0.3,
   },
 
   subtitle: {
-    ...typography.bodyMedium,
-    color: colors.textSecondary,
+    fontSize: 13,
+    fontWeight: "500",
+    color: "#6B7280",
     marginTop: 2,
   },
 
@@ -134,7 +137,8 @@ const styles = StyleSheet.create({
   overviewTitle: {
     ...typography.label,
     fontSize: 11,
-    color: colors.emerald,
+    color: "#0A0A0C",
+    fontWeight: "800",
     letterSpacing: 1,
   },
 

@@ -110,7 +110,7 @@ export default function OrganizerEventManagementScreen() {
           <View style={styles.cardHeaderRow}>
             <StatusBadge status={event.status} />
             <View style={styles.pinTag}>
-              <Ionicons name="key-outline" size={14} color={colors.emerald} />
+              <Ionicons name="key-outline" size={14} color="#F5B800" />
               <Text style={styles.pinText}>PIN: {event.pinCode || "8492"}</Text>
             </View>
           </View>
@@ -124,7 +124,7 @@ export default function OrganizerEventManagementScreen() {
               <Text style={styles.statSub}>Total Reg.</Text>
             </View>
             <View style={styles.statBox}>
-              <Text style={[styles.statNum, { color: colors.emerald }]}>
+              <Text style={[styles.statNum, { color: "#0A0A0C" }]}>
                 {checkedInCount}
               </Text>
               <Text style={styles.statSub}>Checked In</Text>
@@ -196,7 +196,7 @@ export default function OrganizerEventManagementScreen() {
                   size={16}
                   color={
                     item.checkInStatus === "checked_in"
-                      ? colors.emerald
+                      ? "#F5B800"
                       : colors.textMuted
                   }
                 />
@@ -256,9 +256,10 @@ const styles = StyleSheet.create({
   },
 
   headerTitle: {
-    ...typography.titleLarge,
     fontSize: 18,
-    color: colors.textPrimary,
+    fontWeight: "800",
+    color: "#111827",
+    letterSpacing: -0.2,
   },
 
   eventCard: {
@@ -282,7 +283,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
-    backgroundColor: colors.emeraldSoft,
+    backgroundColor: "#FFFDF0",
+    borderWidth: 1,
+    borderColor: "rgba(245, 184, 0, 0.3)",
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: radius.full,
@@ -291,7 +294,7 @@ const styles = StyleSheet.create({
   pinText: {
     ...typography.label,
     fontSize: 11.5,
-    color: colors.emerald,
+    color: "#0A0A0C",
     fontWeight: "700",
   },
 
@@ -360,7 +363,7 @@ const styles = StyleSheet.create({
 
   listContent: {
     paddingHorizontal: spacing.screen,
-    paddingBottom: spacing.xl,
+    paddingBottom: 110,
     gap: spacing.xs,
   },
 
@@ -420,8 +423,8 @@ const styles = StyleSheet.create({
   },
 
   statusCheckedIn: {
-    backgroundColor: colors.emeraldSoft,
-    borderColor: "rgba(15, 118, 110, 0.3)",
+    backgroundColor: "#FFFDF0",
+    borderColor: "rgba(245, 184, 0, 0.4)",
   },
 
   statusPending: {
@@ -435,8 +438,8 @@ const styles = StyleSheet.create({
   },
 
   statusCheckedInText: {
-    color: colors.emerald,
-    fontWeight: "600",
+    color: "#0A0A0C",
+    fontWeight: "700",
   },
 
   statusPendingText: {

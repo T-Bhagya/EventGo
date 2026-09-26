@@ -86,7 +86,7 @@ export default function CreateEventWizardScreen() {
             /* Publish Success View */
             <View style={styles.successContainer}>
               <View style={styles.successCircle}>
-                <Ionicons name="checkmark-sharp" size={48} color={colors.white} />
+                <Ionicons name="checkmark-sharp" size={48} color="#F5B800" />
               </View>
 
               <Text style={styles.successTitle}>Event Published!</Text>
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: spacing.screen,
     paddingTop: spacing.xs,
-    paddingBottom: spacing.xl,
+    paddingBottom: 110,
   },
 
   header: {
@@ -284,13 +284,16 @@ const styles = StyleSheet.create({
   },
 
   headerTitle: {
-    ...typography.headlineLarge,
-    color: colors.textPrimary,
+    fontSize: 22,
+    fontWeight: "800",
+    color: "#111827",
+    letterSpacing: -0.3,
   },
 
   headerSub: {
-    ...typography.bodyMedium,
-    color: colors.textSecondary,
+    fontSize: 13,
+    fontWeight: "500",
+    color: "#6B7280",
     marginTop: 2,
   },
 
@@ -308,7 +311,7 @@ const styles = StyleSheet.create({
   },
 
   stepBarActive: {
-    backgroundColor: colors.emerald,
+    backgroundColor: "#0A0A0C",
   },
 
   formSection: {
@@ -352,8 +355,8 @@ const styles = StyleSheet.create({
   },
 
   formatBtnActive: {
-    borderColor: colors.primary,
-    backgroundColor: colors.surfaceSoft,
+    borderColor: "#0A0A0C",
+    backgroundColor: "#F9FAFB",
   },
 
   formatText: {
@@ -363,8 +366,8 @@ const styles = StyleSheet.create({
   },
 
   formatTextActive: {
-    color: colors.primary,
-    fontWeight: "600",
+    color: "#0A0A0C",
+    fontWeight: "700",
   },
 
   previewBox: {
@@ -379,7 +382,7 @@ const styles = StyleSheet.create({
   previewBoxTitle: {
     ...typography.label,
     fontSize: 11,
-    color: colors.emerald,
+    color: "#F5B800",
     letterSpacing: 1,
     marginBottom: 4,
   },
@@ -410,7 +413,7 @@ const styles = StyleSheet.create({
     width: 72,
     height: 72,
     borderRadius: 36,
-    backgroundColor: colors.emerald,
+    backgroundColor: "#0A0A0C",
     alignItems: "center",
     justifyContent: "center",
     marginBottom: spacing.md,
@@ -454,6 +457,7 @@ const styles = StyleSheet.create({
   summaryVal: {
     ...typography.titleMedium,
     fontSize: 13.5,
-    color: colors.primary,
+    color: "#0A0A0C",
+    fontWeight: "700",
   },
 });

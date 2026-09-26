@@ -15,6 +15,7 @@ export default function ParticipantLayout() {
         }}
       >
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="calendar" />
         <Stack.Screen name="search" />
         <Stack.Screen name="notifications" />
         <Stack.Screen name="event/[id]" />
