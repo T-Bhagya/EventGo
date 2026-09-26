@@ -226,7 +226,7 @@ const featS = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
-    backgroundColor: colors.amber,
+    backgroundColor: "#FFFFFF",
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 50,
@@ -234,7 +234,7 @@ const featS = StyleSheet.create({
   featuredText: {
     ...typography.label,
     fontSize: 9,
-    color: "#000",
+    color: "#000000",
     fontWeight: "800",
     letterSpacing: 1,
   },
@@ -302,22 +302,22 @@ const featS = StyleSheet.create({
     justifyContent: "space-between",
   },
   pricePill: {
-    backgroundColor: colors.amber,
+    backgroundColor: "#FFFFFF",
     paddingHorizontal: 16,
     paddingVertical: 7,
     borderRadius: 50,
   },
   pricePillFree: {
-    backgroundColor: colors.amber,
+    backgroundColor: "#FFFFFF",
   },
   priceText: {
     ...typography.label,
     fontSize: 12,
-    color: "#000",
+    color: "#000000",
     fontWeight: "800",
   },
   priceTextFree: {
-    color: "#000",
+    color: "#000000",
   },
 });
 

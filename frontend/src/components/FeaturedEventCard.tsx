@@ -54,7 +54,7 @@ export function FeaturedEventCard({
       {/* Top Header Tags */}
       <View style={styles.topRow}>
         <View style={styles.featuredBadge}>
-          <Ionicons name="sparkles" size={12} color={colors.gold} />
+          <Ionicons name="sparkles" size={12} color="#000000" />
           <Text style={styles.featuredText}>FEATURED</Text>
         </View>
 
@@ -137,18 +137,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
-    backgroundColor: "rgba(18, 19, 22, 0.85)",
+    backgroundColor: "#FFFFFF",
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: radius.full,
-    borderWidth: 1,
-    borderColor: "rgba(191, 161, 95, 0.4)",
   },
 
   featuredText: {
     ...typography.label,
     fontSize: 10,
-    color: colors.gold,
+    color: "#000000",
+    fontWeight: "800",
     letterSpacing: 0.8,
   },
 
@@ -211,16 +210,16 @@ const styles = StyleSheet.create({
   },
 
   pricePill: {
-    backgroundColor: colors.emerald,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
+    backgroundColor: "#FFFFFF",
+    paddingHorizontal: 12,
+    paddingVertical: 5,
     borderRadius: radius.full,
   },
 
   pricePillText: {
     ...typography.label,
     fontSize: 11.5,
-    color: colors.white,
-    fontWeight: "700",
+    color: "#000000",
+    fontWeight: "800",
   },
 });
