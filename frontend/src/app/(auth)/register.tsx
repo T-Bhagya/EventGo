@@ -17,12 +17,14 @@ import AppTextInput from "../../components/AppTextInput";
 import { colors } from "../../theme/colors";
 import { radius } from "../../theme/radius";
 import { spacing } from "../../theme/spacing";
+import { useAuth } from "../../context/AuthContext";
 import { typography } from "../../theme/typography";
 
 export default function RegisterScreen() {
   const params = useLocalSearchParams<{ role?: string }>();
   const role = params.role === "organizer" ? "Organizer" : "Attendee";
 
+  const { register } = useAuth();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,7 +32,7 @@ export default function RegisterScreen() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (!fullName.trim() || !email.trim() || !password.trim()) {
       setError("Please fill in all required fields.");
       return;
@@ -41,17 +43,39 @@ export default function RegisterScreen() {
       return;
     }
 
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+
     setError("");
     setLoading(true);
 
-    setTimeout(() => {
+    try {
+      const assignedRole = params.role === "organizer" ? "organizer" : "attendee";
+      const result = await register({
+        fullName: fullName.trim(),
+        email: email.trim(),
+        password,
+        role: assignedRole,
+      });
+
       setLoading(false);
-      if (params.role === "organizer") {
+
+      if (!result.success) {
+        setError(result.message);
+        return;
+      }
+
+      if (assignedRole === "organizer") {
         router.replace("/(organizer)/dashboard" as any);
       } else {
         router.replace("/(participant)/(tabs)/home" as any);
       }
-    }, 600);
+    } catch (err: any) {
+      setLoading(false);
+      setError(err?.message || "Registration failed. Please try again.");
+    }
   };
 
   return (

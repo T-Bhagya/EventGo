@@ -17,12 +17,14 @@ import AppTextInput from "../../components/AppTextInput";
 import { colors } from "../../theme/colors";
 import { radius } from "../../theme/radius";
 import { spacing } from "../../theme/spacing";
+import { useAuth } from "../../context/AuthContext";
 import { typography } from "../../theme/typography";
 
 export default function LoginScreen() {
   const params = useLocalSearchParams<{ role?: string }>();
   const role = params.role === "organizer" ? "Organizer" : "Attendee";
 
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -30,7 +32,7 @@ export default function LoginScreen() {
 
   const insets = useSafeAreaInsets();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email.trim() || !password.trim()) {
       setError("Please fill in both email and password.");
       return;
@@ -39,15 +41,27 @@ export default function LoginScreen() {
     setError("");
     setLoading(true);
 
-    // Mock authentication delay & navigation
-    setTimeout(() => {
+    try {
+      const result = await login({ email: email.trim(), password });
       setLoading(false);
-      if (params.role === "organizer") {
+
+      if (!result.success) {
+        setError(result.message);
+        return;
+      }
+
+      const userRole =
+        result.data?.role ||
+        (params.role === "organizer" ? "organizer" : "attendee");
+      if (userRole === "organizer") {
         router.replace("/(organizer)/dashboard" as any);
       } else {
         router.replace("/(participant)/(tabs)/home" as any);
       }
-    }, 600);
+    } catch (err: any) {
+      setLoading(false);
+      setError(err?.message || "Login failed. Please try again.");
+    }
   };
 
   return (
