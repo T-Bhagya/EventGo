@@ -17,17 +17,31 @@ import { MOCK_EVENTS } from "../../../data/mockEvents";
 import { colors } from "../../../theme/colors";
 import { radius } from "../../../theme/radius";
 import { spacing } from "../../../theme/spacing";
+import { Alert } from "react-native";
+import { useAuth } from "../../../context/AuthContext";
+import { registerForEvent } from "../../../services/eventRegistrationBusinessService";
 import { typography } from "../../../theme/typography";
 
 export default function EventDetailsScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const event = MOCK_EVENTS.find((e) => e.id === id) || MOCK_EVENTS[0];
 
+  const { profile } = useAuth();
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [showConfirmSheet, setShowConfirmSheet] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const insets = useSafeAreaInsets();
 
-  const handleRegisterConfirm = () => {
+  const handleRegisterConfirm = async () => {
+    setSubmitting(true);
+    const result = await registerForEvent(profile, event as any);
+    setSubmitting(false);
+
+    if (!result.success) {
+      Alert.alert("Registration Denied", result.message);
+      return;
+    }
+
     setShowConfirmSheet(false);
     router.push({
       pathname: "/(participant)/event/registration-success",
@@ -209,8 +223,9 @@ export default function EventDetailsScreen() {
               </View>
 
               <AppButton
-                title="Confirm Registration"
+                title={submitting ? "Registering..." : "Confirm Registration"}
                 onPress={handleRegisterConfirm}
+                disabled={submitting}
                 style={{ width: "100%", marginTop: spacing.md }}
               />
 
